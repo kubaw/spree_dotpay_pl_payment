@@ -1,25 +1,12 @@
-<div id="checkout">
-<h1>Checkout</h1>
-
-<ol class="progress-steps" id="checkout-step-payment"><li class="completed-first"><span><%= link_to t("Address"), checkout_state_path("address") %></span></li>
-
-<li class="completed"><span><%= link_to t("Delivery"), checkout_state_path("delivery") %></span></li>
-<li class="completed"><span><%= link_to t("Payment"), checkout_state_path("payment") %></span></li>
-<li class="current"><span><%= t("Confirm") %></span></li>
-<li class="next-last"><span><%= t("Complete") %></span></li></ol>
-  <br clear="left" />
-
+<% content_for :subheader do %>
+  aasdasd
+<% end %>
+<fieldset id="order_details" class="pg-redirect-od">
+  <div class="clear"></div>
+  <%= render :partial => 'spree/shared/order_details', :locals => {:order => @order} %>
+</fieldset>
 <fieldset id='payment' style="width:70%;">
   <%= form_tag @gateway.preferred_url, :method => "post" do %>
-
-    <fieldset id="order_details">
-      <div class="clear"></div>
-      <legend><%= t("confirm") %></legend>
-      <%= render :partial => 'spree/shared/order_details', :locals => {:order => @order} -%>
-    </fieldset>
-
-    <hr />
-
     <%= hidden_field_tag 'id', @gateway.preferred_account_id %>
     <%= hidden_field_tag 'opis', "#{Spree::Config[:site_name]} Order: #{@order.number}" %>
     <%= hidden_field_tag 'control', @order.number %>
@@ -36,9 +23,7 @@
     <%= hidden_field_tag 'postcode', @bill_address.zipcode %>
     <%= hidden_field_tag 'country', @bill_address.country.iso3 %>
     <%= hidden_field_tag 'email', (@order.email || @order.user.try(:email)) %>
-
-    <%= submit_tag t('dotpay_pl_submit') %>
-  <% end %>
+  <%= submit_tag t('dotpay_pl_submit') %>
+<% end %>
 </fieldset>
 
-</div>
