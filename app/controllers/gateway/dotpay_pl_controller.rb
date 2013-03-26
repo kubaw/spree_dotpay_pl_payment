@@ -1,10 +1,10 @@
 require 'digest/md5'
 
 class Gateway::DotpayPlController < Spree::BaseController
-  skip_before_filter :verify_authenticity_token, :only => [:comeback, :complete]
   include Spree::Core::ControllerHelpers::Order
   include Spree::Core::ControllerHelpers::Auth
   include ERB::Util
+  skip_before_filter :verify_authenticity_token, :only => [:comeback, :complete]
   # Show form Dotpay for pay
   def show
     @order = Spree::Order.find(params[:order_id])
