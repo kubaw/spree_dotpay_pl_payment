@@ -16,4 +16,14 @@ class PaymentMethod::DotpayPl < Spree::PaymentMethod
     false
   end
 
+  def provider_class
+    self.class
+  end
+
+  alias :payment_source_class, :provider_class
+
+  def source_required?
+    false
+  end
+
 end

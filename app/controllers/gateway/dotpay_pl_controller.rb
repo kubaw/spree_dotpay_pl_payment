@@ -1,16 +1,19 @@
 require 'digest/md5'
 
 class Gateway::DotpayPlController < Spree::BaseController
+  
   include Spree::Core::ControllerHelpers::Order
   include Spree::Core::ControllerHelpers::Auth
   include ERB::Util
+ 
   skip_before_filter :verify_authenticity_token, :only => [:comeback, :complete]
+  
   # Show form Dotpay for pay
   def show
     @order = Spree::Order.find(params[:order_id])
     @gateway = @order.available_payment_methods.find{|x| x.id == params[:gateway_id].to_i }
     @order.payments.destroy_all
-    payment = @order.payments.create!(:amount => 0, :payment_method_id => @gateway.id)
+    @payment = @order.payments.create!(:amount => 0, :payment_method_id => @gateway.id)
 
     if @order.blank? || @gateway.blank?
       flash[:error] = I18n.t("invalid_arguments")
@@ -83,12 +86,8 @@ class Gateway::DotpayPlController < Spree::BaseController
     if @order.total.to_f == params[:amount].to_f
       @order.payment.complete
     end
-
+    @order.update_attribute(:state, "complete")
     @order.finalize!
-
-    @order.next
-    @order.next
-    @order.save
   end
 
   # payment cancelled by user (dotpay signals 3 to 5)
@@ -98,7 +97,6 @@ class Gateway::DotpayPlController < Spree::BaseController
 
   def dotpay_pl_payment_new(params)
     @order.payment.started_processing
-    @order.finalize!
   end
 
 end
