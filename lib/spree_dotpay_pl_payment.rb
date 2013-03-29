@@ -1,7 +1,8 @@
-require 'spree_core'
-
 module SpreeDotpayPlPayment
   class Engine < Rails::Engine
+    require 'spree/core'
+    isolate_namespace Spree
+    engine_name 'spree_dotpay_pl_payment'
 
     config.autoload_paths += %W(#{config.root}/lib)
 
