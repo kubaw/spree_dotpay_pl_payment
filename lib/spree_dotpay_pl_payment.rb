@@ -7,7 +7,7 @@ module SpreeDotpayPlPayment
     config.autoload_paths += %W(#{config.root}/lib)
 
     initializer 'spree.register.payment_methods' do |app|
-      app.config.spree.payment_methods << PaymentMethod::DotpayPl
+      app.config.spree.payment_methods << Spree::PaymentMethod::DotpayPl
     end
 
     def self.activate
@@ -17,5 +17,6 @@ module SpreeDotpayPlPayment
     end
 
     config.to_prepare &method(:activate).to_proc
+
   end
 end
