@@ -27,7 +27,9 @@ module Spree
     # redirecting from dotpay.pl
     def complete
       @order = Spree::Order.find_by_number!(params[:order_id])
-      session[:order_id]=nil
+      if params[:status] == 'OK'
+        session[:order_id]=nil
+      end
       if @order.state=="complete"
         redirect_to order_url(@order, {:checkout_complete => true, :order_token => @order.token}), :notice => I18n.t("payment_success")
       else
