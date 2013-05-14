@@ -33,7 +33,8 @@ module Spree
       if @order.state=="complete"
         redirect_to order_url(@order, {:checkout_complete => true, :order_token => @order.token}), :notice => I18n.t("payment_success")
       else
-        redirect_to order_url(@order)
+        flash[:error] = I18n.t(:payment_error)
+        redirect_to gateway_dotpay_pl_path(:gateway_id => @order.payment_method.id, :order_id => @order.id)
       end
     end
 
